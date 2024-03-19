@@ -80,13 +80,93 @@ namespace CsharpSolution
             // }
 
 
-            //Different Approach Without Finding the Pivot:
-
+            //Different Approach Without Finding the Pivot and Without using a extra Binary search Function:
+            //Below solution will be implemented in the 
             int LowerIndex = 0;
 
             int HigherIndex = nums.Length-1;
 
+            while(LowerIndex <=  HigherIndex)
+            {
+                if(LowerIndex==HigherIndex)
+                {
+                    if(nums[LowerIndex]==target)
+                    {
+                        return LowerIndex;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    int mid = (LowerIndex+HigherIndex)/2;
+
+                    bool LeftToMid = nums[LowerIndex] <= nums[mid];
+
+                    bool MidToRight = nums[mid] <= nums[HigherIndex];
+
+                    bool WRTmid = target <= nums[mid];
+
+                    if(nums[mid]==target)
+                    {
+                        return mid;
+                    }
+                    else
+                    {
+                        if(LeftToMid && !MidToRight)
+                        {
+                            if(WRTmid)
+                            {
+                                if(target>=nums[LowerIndex])
+                                {
+                                    HigherIndex = mid-1;
+                                }
+                                else
+                                {
+                                    LowerIndex = mid+1;
+                                }
+                            }
+                            else
+                            {
+                                LowerIndex = mid+1;
+                            }
+                        }
+                        else if(!LeftToMid && MidToRight)
+                        {
+                            if(WRTmid)
+                            {
+                                HigherIndex = mid-1;
+                            }
+                            else
+                            {
+                                if(target > nums[HigherIndex])
+                                {
+                                    HigherIndex = mid-1;
+                                }
+                                else
+                                {
+                                    LowerIndex = mid+1;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if(target<nums[mid])
+                            {
+                                HigherIndex = mid-1;
+                            }
+                            else
+                            {
+                                LowerIndex = mid+1;
+                            }
+                        }
+                    }
+                }
+            }
             
+            return -1;
         }
 
         public int BinarySearch(int LowerIndex, int HigherIndex, int[] nums,int target)
